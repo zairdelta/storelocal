@@ -23,6 +23,7 @@ export class CartItemsComponent implements OnInit {
     console.log(id);
     this.carts=JSON.parse(localStorage.getItem("Cart")!)
     for (let i = 0; i < this.carts.length; i++) {
+     
       if(this.carts[i].id===id){
         this.total=this.total-this.carts[i].subtotal
         this.carts.splice(i,1)
@@ -38,30 +39,40 @@ export class CartItemsComponent implements OnInit {
     }
   }
   increase(id:number){
+    this.total=0
     this.carts=JSON.parse(localStorage.getItem("Cart")!)
     for (let i = 0; i < this.carts.length; i++) {
+      if (this.carts[i].quantity>=19) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'You can only add 20',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
       if (this.carts[i].id===id) {
         this.carts[i].quantity=this.carts[i].quantity + 1
         this.carts[i].subtotal=this.carts[i].quantity*this.carts[i].price
         this.total=this.total+this.carts[i].subtotal
+      localStorage.setItem("Cart",JSON.stringify(this.carts)) 
       }
-      localStorage.setItem("Cart",JSON.stringify(this.carts))
     }
   }
   decrease(id:number){
     this.carts=JSON.parse(localStorage.getItem("Cart")!)
     for (let i = 0; i < this.carts.length; i++) {
-      if (this.carts[i].quantity<=1) {
-        this.deleteItem(id)
-        return
-      }
+   
       if (this.carts[i].id===id) {
-
         this.carts[i].quantity=this.carts[i].quantity - 1
         this.carts[i].subtotal=this.carts[i].subtotal-this.carts[i].price
-        this.total=this.total-this.carts[i].subtotal
-      }
+        console.log(this.carts[i].subtotal,"subtotal");
+        console.log(this.total,"total");
+        
+        this.total=this.total-this.carts[i].price
       localStorage.setItem("Cart",JSON.stringify(this.carts))
+      }
+      
     }
   }
   getCart(){

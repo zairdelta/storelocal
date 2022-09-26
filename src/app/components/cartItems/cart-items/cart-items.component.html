@@ -18,8 +18,8 @@
                             </div>
                             <h1>Price: {{item?.price}}</h1>
                             <h1>Quantity: {{item?.quantity }}</h1>
-                            <button  class="mt-7 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" (click)="increase(item.id)">+</button>
-                            <button  class="ml-5 mt-7 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" [disabled]="item.cantidad===0" (click)="decrease(item.id)">-</button>
+                            <button  class="mt-7 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" (click)="increase(item.id)" [disabled]="item.quantity===20">+</button>
+                            <button  class="ml-5 mt-7 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" [disabled]="item.quantity===1" (click)="decrease(item.id)">-</button>
                             <h1 class="text-3xl font-bold">Subtotal: {{item.subtotal | number}}</h1>
                         </div>
                         
