@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-cart-items',
   templateUrl: './cart-items.component.html',
@@ -13,10 +13,24 @@ export class CartItemsComponent implements OnInit {
     subtotal:0,
   }
   total:number=0
-  constructor() { }
+  constructor(private router:Router) {
+    this.carts=JSON.parse(localStorage.getItem("Cart")!)
+
+    if (this.carts.length===0) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'info',
+        title: 'The cart is empty',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      this.router.navigate(['/'])
+    }
+   }
 
   ngOnInit(): void {
     this.getCart()
+    
   }
 
   deleteItem(id:number){
@@ -27,34 +41,41 @@ export class CartItemsComponent implements OnInit {
       if(this.carts[i].id===id){
         this.total=this.total-this.carts[i].subtotal
         this.carts.splice(i,1)
-      }
-      localStorage.setItem("Cart",JSON.stringify(this.carts))
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Removed product',
-        showConfirmButton: false,
-        timer: 1500
-      })
-    }
-  }
-  increase(id:number){
-    this.total=0
-    this.carts=JSON.parse(localStorage.getItem("Cart")!)
-    for (let i = 0; i < this.carts.length; i++) {
-      if (this.carts[i].quantity>=19) {
+        localStorage.setItem("Cart",JSON.stringify(this.carts))
         Swal.fire({
           position: 'top-end',
-          icon: 'info',
-          title: 'You can only add 20',
+          icon: 'success',
+          title: 'Removed product',
           showConfirmButton: false,
           timer: 1500
         })
+        this.emptyCart()
       }
+      
+    }
+  }
+  emptyCart(){
+    if (this.carts.length===0) {
+      this.router.navigate(['/'])
+    }
+  }
+  increase(id:number){
+    this.carts=JSON.parse(localStorage.getItem("Cart")!)
+    for (let i = 0; i < this.carts.length; i++) {
+     
       if (this.carts[i].id===id) {
+        if (this.carts[i].quantity>=19) {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'info',
+            title: 'You can only add 20',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }
         this.carts[i].quantity=this.carts[i].quantity + 1
         this.carts[i].subtotal=this.carts[i].quantity*this.carts[i].price
-        this.total=this.total+this.carts[i].subtotal
+        this.total=this.total+this.carts[i].price
       localStorage.setItem("Cart",JSON.stringify(this.carts)) 
       }
     }
@@ -66,9 +87,6 @@ export class CartItemsComponent implements OnInit {
       if (this.carts[i].id===id) {
         this.carts[i].quantity=this.carts[i].quantity - 1
         this.carts[i].subtotal=this.carts[i].subtotal-this.carts[i].price
-        console.log(this.carts[i].subtotal,"subtotal");
-        console.log(this.total,"total");
-        
         this.total=this.total-this.carts[i].price
       localStorage.setItem("Cart",JSON.stringify(this.carts))
       }
