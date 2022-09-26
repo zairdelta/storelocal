@@ -2,7 +2,7 @@
 <nav class="fixed top-0 left-0 bg-white w-full shadow">
     <div class="container m-auto flex justify-between items-center text-gray-700">
         <h1 class="pl-8 py-4 text-xl font-bold"><a href="/">STORELOCALSTORAGE</a></h1>
-        <ul  *ngIf="router.url == '/'" class=" md:flex items-center pr-10 text-base font-semibold cursor">
+        <ul  *ngIf="router.url != '/cart'" class=" md:flex items-center pr-10 text-base font-semibold cursor">
             <a [routerLink]="['/cart']"><i href class="hover:bg-gray-200 py-4 px-6 fa-solid fa-cart-shopping"> {{(countCart$ | async)}}</i></a>
         </ul>
     </div>
